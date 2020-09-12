@@ -41,7 +41,7 @@ class SafeMapWebService(object):
             json_data = {}
             for i in range(len(entry)):
                 json_data[fields[i]] = entry[i]
-                ret.append(json_data)
+            ret.append(json_data)
         return ret
 
     @cherrypy_cors.tools.preflight(
@@ -58,13 +58,11 @@ class SafeMapWebService(object):
                               LocationData.violations)
         response = query.all()
         session.close()
-
         # serialize response into proper JSON using DecimalEncoder
         json_response = json.loads(
             json.dumps(self.query_response_to_json(self.fields,
                                                    response),
                        cls=DecimalEncoder))
-
         return json_response
 
     @cherrypy.tools.json_in()
@@ -76,11 +74,13 @@ class SafeMapWebService(object):
         session = get_session()
         row = session.query(LocationData).filter(LocationData.lat==input_json["lat"],
                                                  LocationData.lng==input_json["lng"]) \
-                                         .count()
+                                         .one_or_none()
         if not row:
             session.add_all(data)
-            session.commit()
+        else:
+            row.violations = input_json["violations"]
 
+        session.commit()
         session.close()
 
 
