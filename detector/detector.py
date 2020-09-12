@@ -29,7 +29,6 @@ def detect(layers, dnn_net, frame):
             confidence = scores[classID]
             # extract category 0 for person
             if classID == 0 and confidence > 0.3:  
-                print(detection[:4])
                 # restore size to original
                 box = detection[:4] * np.array([w, h, w, h])
                 (centerX, centerY, width, height) = box.astype("int")

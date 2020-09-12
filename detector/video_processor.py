@@ -66,4 +66,4 @@ def process_video(video_path, safe_dist):
         key = cv2.waitKey(1) & 0xFF
 
         if key == ord("q") or key == 27:
-            break
+            return unsafe_avg

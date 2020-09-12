@@ -37,7 +37,7 @@ def get_user_config():
     ./conf.json"""
 
     config = {}
-    with open('conf.json', 'r') as f:
+    with open('./web/server/conf.default.json', 'r') as f:
         config = json.loads(f.read())
     return config
 
