@@ -1,7 +1,7 @@
 /* global google */
 import React from 'react';
 import GoogleMapReact from 'google-map-react';
-import './App.css';
+import './App.scss';
 
 export default class HeatMap extends React.Component {
     constructor(props) {
@@ -43,17 +43,17 @@ export default class HeatMap extends React.Component {
     }
 
     render() {
-        
 	return (
-            <GoogleMapReact
-              ref={(el) => this._googleMap = el}
-              bootstrapURLKeys={{ key: "AIzaSyCR_GkgHY3y09arfYxLv4v_2BODFGPDY0s" }}
-              defaultCenter={this.props.center}
-              defaultZoom={this.props.zoom}
-              heatmapLibrary={true}          
-              heatmap={this.state.mapData}
-            />
-
+            <div style={{ height: '100vh', width: '100%' }}>
+              <GoogleMapReact
+                ref={(el) => this._googleMap = el}
+                bootstrapURLKeys={{ key: "AIzaSyCR_GkgHY3y09arfYxLv4v_2BODFGPDY0s" }}
+                defaultCenter={this.props.center}
+                defaultZoom={this.props.zoom}
+                heatmapLibrary={true}          
+                heatmap={this.state.mapData}
+              />
+            </div>
 	);
     }
 }
