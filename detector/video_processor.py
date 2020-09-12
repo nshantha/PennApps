@@ -23,7 +23,7 @@ def process_video(video_path, safe_dist):
 
         ret, frame = video_captured.read()
 
-        # exit when 'q' pressed or EOF
+        # exit when EOF
         if not ret:
             break
         
@@ -34,10 +34,11 @@ def process_video(video_path, safe_dist):
         # use YOLO to detect persons in frame
         detections = detect(layers, dnn_net, frame)
 
+        # detect unsafe distance
         unsafe = analyze_dist(detections, safe_dist)
 
 
-        # loop over the results
+        # loop over the results to render boxes
         for (i, (prob, bbox, centroid)) in enumerate(detections):
             (startX, startY, endX, endY) = bbox
             (cX, cY) = centroid
@@ -56,10 +57,10 @@ def process_video(video_path, safe_dist):
         unsafe_accumulated += len(unsafe)
         num_frames += 1
         unsafe_avg = unsafe_accumulated / num_frames
+
         text = "Average Violations Per Frame: {}".format(round(unsafe_avg, 2))
         cv2.putText(frame, text, (10, frame.shape[0] - 25),
             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)    
-
 
         cv2.imshow("Frame", frame)
         key = cv2.waitKey(1) & 0xFF
