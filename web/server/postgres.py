@@ -25,7 +25,7 @@ class LocationData(Base):
 
     lat = Column(Numeric, primary_key=True)
     lng = Column(Numeric, primary_key=True)
-    density = Column(Numeric)
+    violations = Column(Numeric)
 
 
 def all_tables():
@@ -34,10 +34,10 @@ def all_tables():
 
 def get_user_config():
     """Returns a dictionary containing config options loaded from
-    ./network_conf.json"""
+    ./conf.json"""
 
     config = {}
-    with open('db_conf.json', 'r') as f:
+    with open('conf.json', 'r') as f:
         config = json.loads(f.read())
     return config
 
@@ -54,7 +54,7 @@ def has_tables(tables, engine):
 def get_engine():
     """Returns sqlalchemy engine to connect to db"""
 
-    login = get_user_config()
+    login = get_user_config()["db"]
     engine = create_engine('postgresql+psycopg2://%s:%s@%s:%s/%s' %
                            (login["user"], login["password"],
                             login["host"], login["port"],
@@ -72,7 +72,7 @@ def create_tables():
 
 
 def get_session():
-    """Returns a new session to database specified in ./network_conf.json
+    """Returns a new session to database specified in ./conf.json
 
     get_session() will create the necessary tables if they do not exists in the
     specified database. A new engine is created for each session

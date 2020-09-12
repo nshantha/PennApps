@@ -3,7 +3,7 @@ import cherrypy_cors
 import decimal
 import json
 import os
-from microseil import *
+from postgres import *
 
 
 class DecimalEncoder(json.JSONEncoder):
@@ -18,6 +18,9 @@ class DecimalEncoder(json.JSONEncoder):
 @cherrypy.expose
 class SafeMapWebService(object):
     """Exposes table query api at http://<host>:<port>/info"""
+    
+    def __init__(self):
+        self.fields = ["lat", "lng", "violations"]
 
     def parse_query(self, response):
         """Returns a constructed sqlalchemy query from json query"""
@@ -38,7 +41,7 @@ class SafeMapWebService(object):
             json_data = {}
             for i in range(len(entry)):
                 json_data[fields[i]] = entry[i]
-            ret.append(json_data)
+                ret.append(json_data)
         return ret
 
     @cherrypy_cors.tools.preflight(
@@ -47,23 +50,38 @@ class SafeMapWebService(object):
         pass
 
     @cherrypy.tools.accept(media='text/plain')
-    def GET(self):
-        return "hello"
-
-    @cherrypy.tools.json_in()
     @cherrypy.tools.json_out()
-    def POST(self):
-        input_json = cherrypy.request.json
-        query, session = self.parse_query(input_json)
+    def GET(self):
+        session = get_session()
+        query = session.query(LocationData.lat,
+                              LocationData.lng,
+                              LocationData.violations)
         response = query.all()
         session.close()
 
         # serialize response into proper JSON using DecimalEncoder
         json_response = json.loads(
-            json.dumps(self.query_response_to_json(input_json["fields"],
+            json.dumps(self.query_response_to_json(self.fields,
                                                    response),
                        cls=DecimalEncoder))
+
         return json_response
+
+    @cherrypy.tools.json_in()
+    def POST(self):
+        input_json = cherrypy.request.json
+        data = [LocationData(lat=input_json["lat"],
+                             lng=input_json["lng"],
+                             violations=input_json["violations"])]
+        session = get_session()
+        row = session.query(LocationData).filter(LocationData.lat==input_json["lat"],
+                                                 LocationData.lng==input_json["lng"]) \
+                                         .count()
+        if not row:
+            session.add_all(data)
+            session.commit()
+
+        session.close()
 
 
 def CORS():
@@ -80,6 +98,7 @@ if __name__ == '__main__':
             'cors.expose.on': True,
         },
     }
+
     cherrypy_cors.install()
     cherrypy.tools.CORS = cherrypy.Tool('before_handler', CORS)
 
@@ -87,5 +106,5 @@ if __name__ == '__main__':
     cherrypy.server.socket_host = net_conf["host"]
     cherrypy.server.socket_port = net_conf["port"]
 
-    webapp = Harpoon()
+    webapp = SafeMapWebService()
     cherrypy.quickstart(webapp, '/', conf)

@@ -1,0 +1,13 @@
+{
+    "db": {
+	"user":"postgres",
+	"password":"<db_password>",
+	"host":"db",
+	"port":5432,
+	"database":"postgres"
+    },
+    "cherrypy": {
+	"host":"localhost",
+	"port":8080
+    }
+}
