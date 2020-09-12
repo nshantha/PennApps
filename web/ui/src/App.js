@@ -1,12 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import { animateScroll as scroll } from "react-scroll";
 
 import HeatMap from './HeatMap';
 
 function App() {
     return (
-        <div style={{ height: '100vh', width: '100%' }}>
+        <div className="App">
+          <header className="App-header">
+	    <h2> SafeMaps </h2>
+            <button
+              onClick={() => scroll.scrollToBottom()}>
+              See the map!
+            </button>
+	  </header>
 	  <HeatMap
             center={{
                 lat: 40.7804577,
