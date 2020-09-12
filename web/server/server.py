@@ -20,7 +20,7 @@ class SafeMapWebService(object):
     """Exposes table query api at http://<host>:<port>/info"""
     
     def __init__(self):
-        self.fields = ["lat", "lng", "violations"]
+        self.fields = ["lat", "lng", "weight"]
 
     def parse_query(self, response):
         """Returns a constructed sqlalchemy query from json query"""
@@ -55,7 +55,7 @@ class SafeMapWebService(object):
         session = get_session()
         query = session.query(LocationData.lat,
                               LocationData.lng,
-                              LocationData.violations)
+                              LocationData.weight)
         response = query.all()
         session.close()
         # serialize response into proper JSON using DecimalEncoder
@@ -70,7 +70,7 @@ class SafeMapWebService(object):
         input_json = cherrypy.request.json
         data = [LocationData(lat=input_json["lat"],
                              lng=input_json["lng"],
-                             violations=input_json["violations"])]
+                             weight=input_json["weight"])]
         session = get_session()
         row = session.query(LocationData).filter(LocationData.lat==input_json["lat"],
                                                  LocationData.lng==input_json["lng"]) \
@@ -78,7 +78,7 @@ class SafeMapWebService(object):
         if not row:
             session.add_all(data)
         else:
-            row.violations = input_json["violations"]
+            row.weight = input_json["weight"]
 
         session.commit()
         session.close()

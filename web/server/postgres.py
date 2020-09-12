@@ -18,14 +18,14 @@ class LocationData(Base):
     Attributes:
         lat = (column) Decimal value corresponding to latitiude
         lng = (column) Decimal value corresponding to longitude
-        density = (column) Population density at the corresponding area
+        weight = (column) Population density at the corresponding area
     """
 
     __tablename__ = "location_data"
 
     lat = Column(Numeric, primary_key=True)
     lng = Column(Numeric, primary_key=True)
-    violations = Column(Numeric)
+    weight = Column(Numeric)
 
 
 def all_tables():
