@@ -20,7 +20,6 @@ export default class HeatMap extends React.Component {
         this.updateMap();
     }
 
-
     async updateMap() {
         var xhr = new XMLHttpRequest();
         xhr.addEventListener('load', () => {
@@ -44,15 +43,16 @@ export default class HeatMap extends React.Component {
 
     render() {
 	return (
-            <div style={{ height: '100vh', width: '100%' }}>
+            <div style={{ height: '90vh', width: '100%' }}>
               <GoogleMapReact
                 ref={(el) => this._googleMap = el}
-                bootstrapURLKeys={{ key: "AIzaSyCR_GkgHY3y09arfYxLv4v_2BODFGPDY0s" }}
+                bootstrapURLKeys={{ key: 'AIzaSyCR_GkgHY3y09arfYxLv4v_2BODFGPDY0s', libraries: ['places'] }}
                 defaultCenter={this.props.center}
                 defaultZoom={this.props.zoom}
                 heatmapLibrary={true}          
                 heatmap={this.state.mapData}
-              />
+              >
+              </GoogleMapReact>
             </div>
 	);
     }
