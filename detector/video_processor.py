@@ -160,5 +160,6 @@ def process_video(video_path, location_map, REQ_INTERVAL):
         if key == ord("q") or key == 27:
             cv2.destroyWindow("processed")
             clicks = []
+            return
     clicks = []
     
