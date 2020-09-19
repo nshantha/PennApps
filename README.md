@@ -1,4 +1,4 @@
-# SafeMaps
+# SafeMaps - PennAppsXXI Hackathon Project
   SafeMaps is a platform that allows for people to make conscious decisions before leaving their homes. Using cameras running a person detection algorithm, data can be collected on how well social distancing is being practiced in the area. These cameras would be installed in public places like large couryards, parks, and other open spaces. The data is then sent back to a database in real time and rendered as a heat map for the end user, allowing them to plan an evening out, morning jog, or commute to work before even leaving home. 
 
 ## Technology Used
