@@ -5,6 +5,13 @@
 OpenCV and pythong was used to process the video data. 
 The front end for the website was created made with ReactJS. All of the data produced by the videos is stored on a postgres server and accessed via POST/GET requests served by a cherrypy server
 
+Each camera has different angles and heights, a perspective approach was adopted here, where user will click on the footage for a Bird's Eyes View rectangle to eliminate the affect of camera tilt. Then select a distance approximate to 6 ft in order to help the algorithm to get the most accurate Eucldean Distance to account for different depth of fields for different cams.
+![Alt Text](https://github.com/pwsq/PennApps/blob/master/Screenshot%202020-09-19%20102857.png?raw=true)
+
+The Eucldean distance is calculated with Scipy, Numpy for each pair of detected people and results rendered to each frame that is being analyzed.
+![Alt Text](https://raw.githubusercontent.com/pwsq/PennApps/master/Screenshot%202020-09-19%20103020.png)
+
+
 ## Installation/Running
 
 To launch the website, go to `/web/ui` and run the following:
